@@ -3,6 +3,7 @@ import pickle
 import numpy as np
 from scipy.io.wavfile import read
 from featureextraction import extract_features
+from realTimeRecordSound import read_voice
 #from speakerfeatures import extract_features
 import warnings
 warnings.filterwarnings("ignore")
@@ -15,7 +16,7 @@ modelpath = "Speakers_models/"
 gmm_files = [os.path.join(modelpath,fname) for fname in 
               os.listdir(modelpath) if fname.endswith('.gmm')]
 #Load the Gaussian gender Models
-models    = [pickle.load(open(fname,'rb')) for fname in gmm_files]
+models    = [pickle.load(open(fname,"rb"), encoding='latin1') for fname in gmm_files]
 speakers   = [fname.split("/")[-1].split(".gmm")[0] for fname 
               in gmm_files]
 error = 0
@@ -23,24 +24,26 @@ total_sample = 0.0
 print ("Do you want to Test a Single Audio: Press '1' or The complete Test Audio Sample: Press '0' ?")
 take = int(input().strip())
 if take == 1:
-	print ("Enter the File name from Test Audio Sample Collection :")
-	path2 = input().strip()   
-    print ("Testing Audio : ",path2)
-    sr,audio = read(source + path2)
-    vector   = extract_features(audio,sr)
-    log_likelihood = np.zeros(len(models)) 
-    for i in range(len(models)):
+	  """print ("Enter the File name from Test Audio Sample Collection :")
+	  path2 = input().strip()   
+     print ("Testing Audio : ",path2)
+     sr,audio = read(source+path2)"""
+     voice=read_voice()
+     sr,audio = read(voice)
+     vector   = extract_features(audio,sr)
+     log_likelihood = np.zeros(len(models)) 
+     for i in range(len(models)):
         	gmm    = models[i]  #checking with each model one by one
         	scores = np.array(gmm.score(vector))
         	log_likelihood[i] = scores.sum()
 
-    winner = np.argmax(log_likelihood)
-    print ("\tdetected as - ", speakers[winner])
-
-    time.sleep(1.0)
+     winner = np.argmax(log_likelihood)
+     print ("\tdetected as - ", speakers[winner])
+ 
+     time.sleep(1.0)
 elif take == 0:
 	test_file = "testSamplePath.txt"        
-	file_paths = open(test_file,'r')
+	file_paths = open(test_file,'rb')
 	# Read the test directory and get the list of test audio files 
 	for path in file_paths:   
     
