@@ -1,0 +1,16 @@
+For verification, instead of the model predicting the Speaker's identity for you; You need to pass a sample to be verified, And match the log error difference between the two GMM models(files).
+if the difference si significantly low, you can say the identity of the speaker is 'VERIFIED'.
+
+
+UBM model is suitable for our task but i was confused there that how they used to verify speakers on the basis of single voice
+
+hmm
+  recognizer = Recognizer("/audio/audio")
+
+    # Create a common
+    recognizer.get_mfcc_feat()
+
+    print "SHRUTI training"
+    recognizer.process_audio(True, "../data/voices/shruti.wav")
+    shruti = HMM(transitions=transitions, emissions=emissions, states=states)
+    shruti.train(recognizer.voice_obs[100:300])
