@@ -1,4 +1,4 @@
-# Speaker Diarization
+# Multiple Speaker Recognition
 ### Objective
 The project is meant to handle the speaker diarization task; i.e. the task of determining which parts of a speech stream is uttered by each speaker. The main objective is to improve the current speaker diarization accuracy by investigating appropriate approaches. 
 leading to the construction of a novel speech representation which holds the greatest speaker discrimination which is expected to improve the task at hand.
